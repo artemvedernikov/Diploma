@@ -5,18 +5,22 @@
 \usepackage[russian,english]{babel}
 
 \usepackage[paper=a4paper,top=13.5mm, bottom=13.5mm,left=16.5mm,right=13.5mm,includefoot]{geometry}
-\usepackage[pdftex,unicode,colorlinks=true,urlcolor=blue,hyperindex,breaklinks]{hyperref} 
+\usepackage[pdftex,unicode,colorlinks=true,urlcolor=blue,hyperindex,breaklinks]{hyperref}
+\usepackage{indentfirst}
 
 \title{HP and miles per galon}
 \author{Car salesman}
+\date{} % самый простой способ убирания даты из заголовка
 
 \begin{document}
 
-% Global parametrs for codeblocks: opts_chunk$set... Local parametrs are placed between: <<your local parametrs here>>=
+% Global parametrs for codeblocks: opts_chunk$set... 
+% Local parametrs are placed between: <<your local parametrs here>>=
 % To make the compilation faster use "cache=TRUE" option; however it may cause some problems.
-% Source: http://yihui.name/knitr/demos
+% Sources: http://yihui.name/knitr/demos and https://github.com/bdemeshev/em301/wiki/little_tricks
 
 <<basic-options, include=FALSE>>= 
+# include=FALSE --- not to include results of the chunk output; code is still evaluated, nothing is written into the document
 library(knitr)
 # echo=FALSE --- not to include R-code in the output file
 opts_chunk$set(echo=FALSE) 
@@ -26,7 +30,7 @@ opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=100, fig.width = 5, fig
 
 \maketitle
 
-График:
+Зависимость между лошадиными силами и количеством миль на галон топлива:
 
 <<graph>>=
 graph <- plot(mtcars$mpg, mtcars$hp, data = mtcars)
