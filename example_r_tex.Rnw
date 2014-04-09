@@ -1,26 +1,27 @@
 \documentclass[a4paper]{article}
 
+\usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
+\usepackage[russian,english]{babel}
 
 \usepackage[paper=a4paper,top=13.5mm, bottom=13.5mm,left=16.5mm,right=13.5mm,includefoot]{geometry}
 \usepackage[pdftex,unicode,colorlinks=true,urlcolor=blue,hyperindex,breaklinks]{hyperref} 
 
-\title{Skateboarding}
-\author{Richie Jackson}
+\title{HP and miles per galon}
+\author{Car salesman}
 
 \begin{document}
 
-% Global parametrs for codeblocks: opts_chunk$set... Local parametrs are placed between <<local parametrs>>=
-% echo=FALSE --- not to include R-code in the output file
-% warning=FALSE, message=FALSE --- not to include warning messages
-% To make the compilation faster use cache=TRUE; however it may cause some problems.
+% Global parametrs for codeblocks: opts_chunk$set... Local parametrs are placed between: <<your local parametrs here>>=
+% To make the compilation faster use "cache=TRUE" option; however it may cause some problems.
 % Source: http://yihui.name/knitr/demos
 
-<<basic-options, echo=FALSE,include=FALSE,message=FALSE>>= 
+<<basic-options, include=FALSE>>= 
 library(knitr)
-opts_chunk$set(echo=FALSE)
-opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=100, fig.width = 6, fig.height = 5)
+# echo=FALSE --- not to include R-code in the output file
+opts_chunk$set(echo=FALSE) 
+# warning=FALSE, message=FALSE --- not to include warning messages
+opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=100, fig.width = 5, fig.height = 4, fig.align = 'center')
 @
 
 \maketitle
@@ -29,12 +30,6 @@ opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=100, fig.width = 6, fig
 
 <<graph>>=
 graph <- plot(mtcars$mpg, mtcars$hp, data = mtcars)
-@
-
-<<"init", echo=FALSE,include=FALSE,message=FALSE>>=
-library(knitr) # взаимодействие R-Latex
-opts_chunk$set(echo=TRUE) # echo=TRUE включает программный код в готовый pdf. Для учебных целей мы включаем код в pdf.
-opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=300)
 @
 
 \end{document}
