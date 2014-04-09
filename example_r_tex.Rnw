@@ -1,22 +1,20 @@
 \documentclass[a4paper]{article}
 
-\usepackage[T2A]{fontenc} % Поддержка русских букв
-\usepackage[cp1251]{inputenc} % кодировка 
-\usepackage[english,russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
 
 \usepackage[paper=a4paper,top=13.5mm, bottom=13.5mm,left=16.5mm,right=13.5mm,includefoot]{geometry}
 \usepackage[pdftex,unicode,colorlinks=true,urlcolor=blue,hyperindex,breaklinks]{hyperref} 
-\usepackage{indentfirst}
 
 \title{Skateboarding}
 \author{Richie Jackson}
 
 \begin{document}
 
-% Global parametrs for codeblocks: opts_chunk$set... Local parametrs are place between <<local parametrs>>=
+% Global parametrs for codeblocks: opts_chunk$set... Local parametrs are placed between <<local parametrs>>=
 % echo=FALSE --- not to include R-code in the output file
 % warning=FALSE, message=FALSE --- not to include warning messages
-% Можно использовать опцию cache=TRUE, чтобы ускорять компиляцию файла
+% To make the compilation faster use cache=TRUE; however it may cause some problems.
 % Source: http://yihui.name/knitr/demos
 
 <<basic-options, echo=FALSE,include=FALSE,message=FALSE>>= 
@@ -27,14 +25,16 @@ opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=100, fig.width = 6, fig
 
 \maketitle
 
-\section{Введение}
- 
-Простейший график:
+Р“СЂР°С„РёРє:
 
 <<graph>>=
 graph <- plot(mtcars$mpg, mtcars$hp, data = mtcars)
-graph
 @
 
+<<"init", echo=FALSE,include=FALSE,message=FALSE>>=
+library(knitr) # РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ R-Latex
+opts_chunk$set(echo=TRUE) # echo=TRUE РІРєР»СЋС‡Р°РµС‚ РїСЂРѕРіСЂР°РјРјРЅС‹Р№ РєРѕРґ РІ РіРѕС‚РѕРІС‹Р№ pdf. Р”Р»СЏ СѓС‡РµР±РЅС‹С… С†РµР»РµР№ РјС‹ РІРєР»СЋС‡Р°РµРј РєРѕРґ РІ pdf.
+opts_chunk$set(warning=FALSE,message=FALSE,dev='png',dpi=300)
+@
 
 \end{document}
