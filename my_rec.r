@@ -1,3 +1,5 @@
+library('matrix')
+
 insta
 r <- as(MovieLense, "matrix") # rating matrix 
 
@@ -80,4 +82,8 @@ create_distance_matrix <- function(rating_matrix, method="pearson", ...) {
     }
   }
   return(res)
+}
+
+sparse_matrix <- function(matrix, sparsity) {
+   
 }
