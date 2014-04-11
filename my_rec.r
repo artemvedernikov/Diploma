@@ -1,6 +1,5 @@
-library('matrix')
 
-insta
+library('matrix') # library for work with sparse matrices
 r <- as(MovieLense, "matrix") # rating matrix 
 
 # similarity functions for users
