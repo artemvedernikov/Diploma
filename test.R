@@ -49,6 +49,8 @@ data <- rbind(data, c(5,NA,5,5,NA,4,NA,2,NA))
 data <- rbind(data, c(3,4,NA,2,NA,3,5,5,NA))
 
 predict(data, total_clust_num = 2)
+
+test_result_100k <- predict(r, total_clust_num = 15)
 #========
 #========TEST(30)====
 #RMSE

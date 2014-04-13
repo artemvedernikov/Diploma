@@ -33,10 +33,10 @@ pearson_similarity <- function(userA, userB) {
     c <- c + (userB[i] - r_b) ^ 2
   }
   if (b == 0) {
-    b <- 1
+    return (0)
   }
   if (c == 0) {
-    c <- 1
+    return(0)
   }
   return (a / (sqrt(b) * sqrt(c))) 
 }
