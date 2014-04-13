@@ -4,3 +4,12 @@
 *.aut
 *.gz
 *.aux
+
+# Idea IDE staff #
+##################
+*.iml
+*.ec
+*.ipr
+*.iws
+.idea/
+*/.idea
