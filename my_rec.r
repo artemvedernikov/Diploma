@@ -202,12 +202,12 @@ estimate_user <- function(matrix, row_number, distance_matrix) {
 
 # predicts ratings(TEST 20)
 # data - rating matrix, users = rows, items = columns
-predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.7, max_iterations = 5, cluster_shift = -1) {
+predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.7, max_iterations = 5, cluster_shift = -1, method = "pearson") {
   
   result_matrix <- c()
   
   #evaluating default clustering
-  default_distance_matrix <- create_distance_matrix(data)
+  default_distance_matrix <- create_distance_matrix(data, method = method)
   default_fanny <- fanny(as.dist(default_distance_matrix), total_clust_num, maxit = 20000)
   default_clustering <- default_fanny['clustering']
   default_membership <- default_fanny['membership'][[1]]
@@ -250,7 +250,7 @@ predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.
           new_estimated_matrix[k,] <- estimate_user(estimated_matrix, k, distance_matrix)
         }
         
-        distance_matrix <- create_distance_matrix(new_estimated_matrix)
+        distance_matrix <- create_distance_matrix(new_estimated_matrix, method = method)
         fanny <- fanny(as.dist(distance_matrix), total_clust_num, maxit = 20000)
         clustering <- fanny['clustering']
         membership <- fanny['membership'][[1]]
@@ -261,7 +261,6 @@ predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.
       } 
     }
     result_matrix <- rbind(result_matrix, new_estimated_matrix[1,])
-    print(result_matrix)  
   }
   return(result_matrix)  
 }
