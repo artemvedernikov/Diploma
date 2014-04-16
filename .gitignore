@@ -13,3 +13,5 @@
 *.iws
 .idea/
 */.idea
+
+*.DS_Store

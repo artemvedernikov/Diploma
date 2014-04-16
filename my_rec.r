@@ -52,13 +52,19 @@ cosine_similarity <- function(userA, userB) {
 }
 
 strange_similarity <- function(userA, userB, diff=0) {
-  co_rated <- (!is.na(userA) & !is.na(userB))
-  co_rated <- abs(userA[co_rated] - userB[co_rated]) <= diff
-  euclid <- sqrt(sum((userA[co_rated] - userB[co_rated])^2))
+  co_rated <- c()
+  if()
+  for (i in 1: length(userA)) {
+    if ( !is.na(userA[i]) & !is.na(userB[i]) & (abs(userA[i]- userB[i]) <= diff))
+      co_rated <- c(co_rated, i)
+  }
+  print(co_rated)
+ 
   
-  if (co_rated == 0) {
+  if (length(co_rated )== 0 ) {
     return (0)
   } else {
+    euclid <- sqrt(sum((userA[co_rated] - userB[co_rated])^2))
     return(sum(co_rated) / euclid)
   }
 }
@@ -161,7 +167,7 @@ estimate_user <- function(matrix, row_number, distance_matrix) {
   
   if (nrow(matrix) == 1) { # matrix = vector (shit happens)
     result <- matrix
-    print("fuck")
+    print("oops")
     mean_user_rating <- mean(matrix[1,], na.rm = TRUE)
     print(mean_user_rating)
     for (i in 1: ncol(matrix)) {
@@ -169,7 +175,6 @@ estimate_user <- function(matrix, row_number, distance_matrix) {
         result[1,i] <- mean_user_rating
       }
     }
-    print(result)
     return(result)
   } 
   
@@ -208,7 +213,8 @@ predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.
   
   #evaluating default clustering
   default_distance_matrix <- create_distance_matrix(data, method = method)
-  default_fanny <- fanny(as.dist(default_distance_matrix), total_clust_num, maxit = 20000)
+  print(default_distance_matrix)
+  default_fanny <- fanny(as.dist(default_distance_matrix), total_clust_num, maxit = 20000, memb.exp = 1.1)
   default_clustering <- default_fanny['clustering']
   default_membership <- default_fanny['membership'][[1]]
   default_clusters <- apply(default_membership, 1, best_clust)
@@ -230,7 +236,7 @@ predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.
     
     repeat { # estimate ratings 
       
-      estimated_matrix <- cut_data_matrix(estimated_matrix, clustering, default_clusters[[i]], row_number)
+      estimated_matrix <- cut_data_matrix(estimated_matrix, clustering, clusters[[i]], row_number)
       row_number <- 1
       good_users <- default_clustering %in% clusters # we don't compute dist matrix again but get it from existing one by leaving only those users who are in good clusters 
       distance_matrix <- default_distance_matrix[good_users, good_users]
@@ -251,7 +257,7 @@ predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.
         }
         
         distance_matrix <- create_distance_matrix(new_estimated_matrix, method = method)
-        fanny <- fanny(as.dist(distance_matrix), total_clust_num, maxit = 20000)
+        fanny <- fanny(as.dist(distance_matrix), total_clust_num, maxit = 20000, memb.exp = 1.5)
         clustering <- fanny['clustering']
         membership <- fanny['membership'][[1]]
         clusters <- apply(membership, 1, best_clust)
@@ -268,11 +274,12 @@ predict <- function(data, clust_num = 2, total_clust_num = 10, clust_weight = 0.
 # root mean squared error
 RMSE <- function(original, estimated, test) {
   
-  test_size <- sum(is.na(original))
+  test_size <- sum(is.na(original)) - sum(is.na(test))
+  print(test_size)
   result_summ <- 0
   for (i in 1: nrow(original)) {
     for (j in 1: ncol(original)) {
-      if (is.na(original[i,j])) {
+      if (is.na(original[i,j]) & !is.na(test[i,j])) {
         result_summ <- result_summ + (estimated[i, j] - test[i, j]) ^ 2
       }  
     }
@@ -286,11 +293,11 @@ RMSE <- function(original, estimated, test) {
 #mean absolute error
 MAE <- function(original, estimated, test) {
   
-  test_size <- sum(is.na(original))
+  test_size <- sum(is.na(original)) - sum(is.na(test))
   result_summ <- 0 
   for (i in 1: nrow(original)) {
     for (j in 1: ncol(original)) {
-      if (is.na(original[i,j])) {
+      if (is.na(original[i,j]) & !is.na(test[i,j])) {
         result_summ <- result_summ + abs(estimated[i, j] - test[i, j])
       }  
     }

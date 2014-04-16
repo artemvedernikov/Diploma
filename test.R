@@ -6,7 +6,9 @@ num_clusters <- 30
 
 distance_r[is.na(distance_r)] <- 0 # replace on NA (TODO: where the fuck they a from??)
 
-
+#====
+#strabge_sim
+strange_similarity(c(1,2,3), c(1,1,NA))
 
 
 FANNY <- fanny(distance_r, 10, maxit = 200)
@@ -53,14 +55,14 @@ predict(data, total_clust_num = 2)
 test_result_100k <- predict(r, total_clust_num = 15)
 #========
 #========TEST(30)====
-#RMSE
+#mae
 result_data <- data
 result_data[is.na(result_data)] <- 5
 
 test_data <- result_data
 test_data[1,1] <- 1
 
-RMSE(data, result_data, test_data)
+mae(data, result_data, test_data)
 
 #=========
 #========TEST(40)====
@@ -154,3 +156,36 @@ Sys.time()
 pedEstrthree <- predict(testE, clust_num = 3, method="strange")
 Sys.time()
 pedFstrthree <- predict(testF,clust_num = 3, method="strange")
+
+
+rmseA <- RMSE(testA, pedA, r)
+rmseB <- RMSE(testB, pedB, r)
+rmseC <- RMSE(testC, pedC, r)
+rmseD <- RMSE(testD, pedD, r)
+rmseE <- RMSE(testE, pedE, r)
+rmseF <- RMSE(testF, pedF, r)
+
+maeA <- MAE(testA, pedA, r)
+maeB <- MAE(testB, pedB, r)
+maeC <- MAE(testC, pedC, r)
+maeD <- MAE(testD, pedD, r)
+maeE <- MAE(testE, pedE, r)
+maeF <- MAE(testF, pedF, r)
+
+
+rmseAcos <- RMSE(testA, pedAcos, r)
+rmseBcos <- RMSE(testB, pedBcos, r)
+rmseCcos <- RMSE(testC, pedCcos, r)
+rmseDcos <- RMSE(testD, pedDcos, r)
+rmseEcos <- RMSE(testE, pedEcos, r)
+rmseFcos <- RMSE(testF, pedFcos, r)
+
+maeAcos <- MAE(testA, pedAcos, r)
+maeBcos <- MAE(testB, pedBcos, r)
+maeCcos <- MAE(testC, pedCcos, r)
+maeDcos <- MAE(testD, pedDcos, r)
+maeEcos <- MAE(testE, pedEcos, r)
+maeFcos <- MAE(testF, pedFcos, r)
+
+
+testData <- sparse_matrix(data, 0.1)
