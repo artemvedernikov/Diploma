@@ -41,16 +41,7 @@ result[2,] == c(2,3,4)
 #=========
 #========TEST(2)====
 #predict
-data <- c()
-data <- rbind(data, c(NA,1,2,NA,NA,NA,5,5,5))
-data <- rbind(data, c(5,5,NA,3,3,4,NA,1,1))
-data <- rbind(data, c(NA,5,NA,2,4,NA,1,3,2))
-data <- rbind(data, c(1,NA,NA,1,2,3,4,NA,1))
-data <- rbind(data, c(5,NA,5,5,NA,4,3,2,2))
-data <- rbind(data, c(5,NA,5,5,NA,4,NA,2,NA))
-data <- rbind(data, c(3,4,NA,2,NA,3,5,5,NA))
 
-predict(data, total_clust_num = 2)
 
 test_result_100k <- predict(r, total_clust_num = 15)
 #========
@@ -74,88 +65,76 @@ sparse_matrix(test_data, 0.1)
 
 
 #=== first test results(all standart)
-testA <- sparse_matrix(r,0.1)
+testA <- sparse_matrix(r,0.8)
 testB <- sparse_matrix(r,0.2)
 testC <- sparse_matrix(r,0.3)
 testD <- sparse_matrix(r,0.4)
 testE <- sparse_matrix(r,0.5)
 testF <- sparse_matrix(r,0.6)
 
+testA <- testA[ncol(testA) - sum(is.na(testA)) > 3,]
+testB <- testB[ncol(testB) - sum(is.na(testB)) > 3,]
+testC <- testC[ncol(testC) - sum(is.na(testC)) > 3,]
+testD <- testD[ncol(testD) - sum(is.na(testD)) > 3,]
+testE <- testE[ncol(testE) - sum(is.na(testE)) > 3,]
+testF <- testF[ncol(testF) - sum(is.na(testF)) > 3,]
+
+Sys.time()
 pedA <- predict(testA, total_clust_num = 15)
+Sys.time()
 pedB <- predict(testB, total_clust_num = 15)
+Sys.time()
 pedC <- predict(testC, total_clust_num = 15)
+Sys.time()
 pedD <- predict(testD, total_clust_num = 15)
+Sys.time()
 pedE <- predict(testE, total_clust_num = 15)
+Sys.time()
 pedF <- predict(testF, total_clust_num = 15)
 #=== seconds test results
 "2 clust cosine"
 Sys.time()
-pedAcos <- predict(testA, total_clust_num = 15, method="cosine")
+pedAcos <- predict(testA[1:100,], total_clust_num = 6, method="cosine")
 Sys.time()
-pedBcos <- predict(testB, total_clust_num = 15, method="cosine")
+pedBcos <- predict(testB[1:100,], total_clust_num = 6, method="cosine")
 Sys.time()
-pedCcos <- predict(testC, total_clust_num = 15, method="cosine")
+pedCcos <- predict(testC[1:100,], total_clust_num = 6, method="cosine")
 Sys.time()
-pedDcos <- predict(testD, total_clust_num = 15, method="cosine")
+pedDcos <- predict(testD[1:100,], total_clust_num = 6, method="cosine")
 Sys.time()
-pedEcos <- predict(testE, total_clust_num = 15, method="cosine")
+pedEcos <- predict(testE[1:100,], total_clust_num = 6, method="cosine")
 Sys.time()
-pedFcos <- predict(testF, total_clust_num = 15, method="cosine")
+pedFcos <- predict(testF[1:100,], total_clust_num = 6, method="cosine")
+Sys.time()
 
-"2 clust strange"
-Sys.time()
-pedAstr <- predict(testA, total_clust_num = 15, method="strange")
-Sys.time()
-pedBstr <- predict(testB, total_clust_num = 15, method="strange")
-Sys.time()
-pedCstr <- predict(testC, total_clust_num = 15, method="strange")
-Sys.time()
-pedDstr <- predict(testD, total_clust_num = 15, method="strange")
-Sys.time()
-pedEstr <- predict(testE, total_clust_num = 15, method="strange")
-Sys.time()
-pedFstr <- predict(testF, total_clust_num = 15, method="strange")
 "3 clust pearson"
 #=====
+pedAthree <- predict(testA[1:100,], clust_num = 3, total_clust_num = 6)
 Sys.time()
-pedAthree <- predict(testA, clust_num = 3)
+pedBthree <- predict(testB[1:100,], clust_num = 3, total_clust_num = 6)
 Sys.time()
-pedBthree <- predict(testB, clust_num = 3)
+pedCthree <- predict(testC[1:100,], clust_num = 3, total_clust_num = 6)
 Sys.time()
-pedCthree <- predict(testC, clust_num = 3)
+pedDthree <- predict(testD[1:100,], clust_num = 3, total_clust_num = 6)
 Sys.time()
-pedDthree <- predict(testD, clust_num = 3)
+pedEthree <- predict(testE[1:100,], clust_num = 3, total_clust_num = 6)
 Sys.time()
-pedEthree <- predict(testE, clust_num = 3)
-Sys.time()
-pedFthree <- predict(testF, clust_num = 3)
+pedFthree <- predict(testF[1:100,], clust_num = 3, total_clust_num = 6)
 "3 clust cosine"
-Sys.time()
-pedAcosthree <- predict(testA, total_clust_num = 15, method="cosine")
-Sys.time()
-pedBcosthree <- predict(testB, total_clust_num = 15, method="cosine")
-Sys.time()
-pedCcosthree <- predict(testC, total_clust_num = 15, method="cosine")
-Sys.time()
-pedDcosthree <- predict(testD, total_clust_num = 15, method="cosine")
-Sys.time()
-pedEcosthree <- predict(testE, total_clust_num = 15, method="cosine")
-Sys.time()
-pedFcosthree <- predict(testF, total_clust_num = 15, method="cosine")
 
-"3 clust strange"
+
 Sys.time()
-pedAstrthree <- predict(testA, clust_num = 3, method="strange")
+pedAcosthree <- predict(testA[1:100,], clust_num = 3, method="cosine", total_clust_num = 6)
 Sys.time()
-pedBstrthree <- predict(testB, clust_num = 3, method="strange")
+pedBcosthree <- predict(testB[1:100,], clust_num = 3, method="cosine", total_clust_num = 6)
 Sys.time()
-pedCstrthree <- predict(testC, clust_num = 3, method="strange")
+pedCcosthree <- predict(testC[1:100,], clust_num = 3, method="cosine", total_clust_num = 6)
 Sys.time()
-pedDstrthree <- predict(testD, clust_num = 3, method="strange")
+pedDcosthree <- predict(testD[1:100,], clust_num = 3, method="cosine", total_clust_num = 6)
 Sys.time()
-pedEstrthree <- predict(testE, clust_num = 3, method="strange")
+pedEcosthree <- predict(testE[1:100,], clust_num = 3, method="cosine", total_clust_num = 6)
 Sys.time()
-pedFstrthree <- predict(testF,clust_num = 3, method="strange")
+pedFcosthree <- predict(testF[1:100,], clust_num = 3, method="cosine", total_clust_num = 6)
 
 
 rmseA <- RMSE(testA, pedA, r)
@@ -189,3 +168,58 @@ maeFcos <- MAE(testF, pedFcos, r)
 
 
 testData <- sparse_matrix(data, 0.1)
+# test predict
+predict(data, total_clust_num = 2)
+
+
+Sys.time()
+pedAl <- predict(testA[1:100,], total_clust_num = 6)
+Sys.time()
+pedBl <- predict(testB[1:100,], total_clust_num = 6)
+Sys.time()
+pedCl <- predict(testC[1:100,], total_clust_num = 6)
+Sys.time()
+pedDl <- predict(testD[1:100,], total_clust_num = 6)
+Sys.time()
+pedEl <- predict(testE[1:100,], total_clust_num = 6)
+Sys.time()
+pedFl <- predict(testF[1:100,], total_clust_num = 6)
+
+
+rmseAl <- RMSE(testA[1:100,], pedAl, r[1:100,])
+rmseBl <- RMSE(testB[1:100,], pedBl, r[1:100,])
+rmseCl <- RMSE(testC[1:100,], pedCl, r[1:100,])
+rmseDl <- RMSE(testD[1:100,], pedDl, r[1:100,])
+rmseEl <- RMSE(testE[1:100,], pedEl, r[1:100,])
+rmseFl <- RMSE(testF[1:100,], pedFl, r[1:100,])
+
+maeAl <- MAE(testA[1:100,], pedAl, r[1:100,])
+maeBl <- MAE(testB[1:100,], pedBl, r[1:100,])
+maeCl <- MAE(testC[1:100,], pedCl, r[1:100,])
+maeDl <- MAE(testD[1:100,], pedDl, r[1:100,])
+maeEl <- MAE(testE[1:100,], pedEl, r[1:100,])
+maeFl <- MAE(testF[1:100,], pedFl, r[1:100,])
+
+
+rmseAlcosthree <- RMSE(testA[1:100,], pedAcosthree, r[1:100,])
+rmseBlcosthree <- RMSE(testB[1:100,], pedBcosthree, r[1:100,])
+rmseClcosthree <- RMSE(testC[1:100,], pedCcosthree, r[1:100,])
+
+results_rmse <- c()
+results_rmse <-rbind(results_rmse, c(rmseAl, NA, rmseCl,rmseDl, rmseEl, rmseFl))
+results_rmse <-rbind(results_rmse, c(rmseAlcos, rmseBlcos, rmseClcos,rmseDlcos, rmseElcos, rmseFlcos))
+results_rmse <-rbind(results_rmse, c(rmseAlthree, rmseBlthree, rmseClthree,rmseDlthree, rmseElthree, rmseFlthree)
+results_rmse <- rbind(results_rmse, c(rmseAlcosthree, rmseBlcosthree, rmseClcosthree, NA,NA,NA))
+
+
+
+
+
+
+
+big_ped_A = predict(testA[1:800,], test = testA[801:943,], total_clust_num = 15)
+big_ped_B = predict(testB[1:800,], test = testB[801:943,], total_clust_num = 15)
+big_ped_C = predict(testC[1:800,], test = testC[801:943,], total_clust_num = 15)
+big_ped_D = predict(testD[1:800,], test = testD[801:943,], total_clust_num = 15)
+big_ped_E = predict(testE[1:800,], test = testE[801:943,], total_clust_num = 15)
+big_ped_F = predict(testF[1:800,], test = testF[801:943,], total_clust_num = 15)
