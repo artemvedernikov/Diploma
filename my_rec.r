@@ -51,27 +51,11 @@ cosine_similarity <- function(userA, userB) {
   return(scalar_product / (norm_a * norm_b))
 }
 
-strange_similarity <- function(userA, userB, diff=0) {
-  co_rated <- c()
-  if()
-  for (i in 1: length(userA)) {
-    if ( !is.na(userA[i]) & !is.na(userB[i]) & (abs(userA[i]- userB[i]) <= diff))
-      co_rated <- c(co_rated, i)
-  }
-  print(co_rated)
- 
-  
-  if (length(co_rated )== 0 ) {
-    return (0)
-  } else {
-    euclid <- sqrt(sum((userA[co_rated] - userB[co_rated])^2))
-    return(sum(co_rated) / euclid)
-  }
-}
 
-# creating distance matricix between users
+
+# creating similarity matricix between users
 # TODO: Optimize it somehow
-create_distance_matrix <- function(rating_matrix, method="pearson", ...) {
+create_similarity_matrix <- function(rating_matrix, method="pearson", ...) {
   res <- matrix(0, nrow(rating_matrix), nrow(rating_matrix))
   if (method == "pearson") {
 
@@ -88,13 +72,7 @@ create_distance_matrix <- function(rating_matrix, method="pearson", ...) {
         res[i, j] <- cosine_similarity(rating_matrix[i,], rating_matrix[j,])      
       }
     }
-  } else if (method == "strange") {
-    for (i in 1:nrow(rating_matrix)) {
-      for (j in 1:nrow(rating_matrix)) {
-        res[i, j] <- strange_similarity(rating_matrix[i,], rating_matrix[j,], diff=diff)      
-      }
-    }
-  }
+  } 
   for (i in 1:nrow(res)) {
     for (j in i: nrow(res))
       res[i,j] <- res[j,i]
@@ -103,10 +81,7 @@ create_distance_matrix <- function(rating_matrix, method="pearson", ...) {
   return(res)
 }
 
-#make rating matrix more sparse(use sokind of random values)
-sparse_matrix <- function(matrix, sparsity) {
-   
-}
+
 
 matrix_apply <- function(m, f) {
   m2 <- m
@@ -131,79 +106,7 @@ clustering <- FANNY['clustering']
 
 membership <- FANNY['membership'][[1]]
 
-best_clust <- function(array, degree=0.8) {
-  new_array <- sort(array, decreasing = TRUE)
-  res <- 1
-  sum <- 0
-  repeat {
-    sum <- sum + new_array[res]
-    if (sum >= degree) {
-      break
-    } else {
-      res <- res + 1
-    }
-  }
-  return(new_array[1:res])
-}
 
-cluster_by_membership_degree <- function(memberships, degree = 0.3) {
-  
-  memberships > degree
-  
-}
-
-# creates new matrix leaving only rows who belong to the clusters, (TEST 10)
-cut_data_matrix <- function(data, clustering, clusters, rownum) {
-  result <- data[rownum,]
-  for (i in 1:nrow(data)) {
-    if (i != rownum && clustering[i] %in% clusters) {
-      result <- rbind(result, data[i,])
-    }
-  }
-  return (result)
-}
-
-estimate_user <- function(matrix, row_number, distance_matrix) {
-  
-  if (nrow(matrix) == 1) { # matrix = vector (shit happens)
-    result <- matrix
-    print("oops")
-    mean_user_rating <- mean(matrix[1,], na.rm = TRUE)
-    print(mean_user_rating)
-    for (i in 1: ncol(matrix)) {
-      if (is.na(matrix[1,i])) {
-        result[1,i] <- mean_user_rating
-      }
-    }
-    return(result)
-  } 
-  
-  estimated_matrix <- matrix
-  print(estimated_matrix)
-  mean_user_ratings <- apply(estimated_matrix, 1, mean, na.rm = TRUE)
-  mean_rating <- mean_user_ratings[row_number]
-  
-  for (l in 1: ncol(estimated_matrix)) {
-    
-    
-    if (l %in% unrated_items) { # estimate missing rating r_{1l} - only for current user
-      
-      users_who_rated_item_l <- apply(estimated_matrix, 1, function(x) { return (!is.na(x[l]))})
-      
-      mean_user_ratings_who_rated_item_l <- mean_user_ratings[users_who_rated_item_l] 
-      item_l_ratings <- estimated_matrix[users_who_rated_item_l, l]  
-      
-      diff_ratings <- item_l_ratings - mean_user_ratings_who_rated_item_l
-      dist_users_who_rated_item_l <- distance_matrix[1, users_who_rated_item_l]
-      sum_dist <- sum(abs(dist_users_who_rated_item_l)) # denominator
-      
-      estimated_rating <- (dist_users_who_rated_item_l  * diff_ratings) / sum_dist
-      
-      estimated_matrix[row_number, l] <- mean_rating + estimated_rating
-    } 
-  } 
-  return(estimated_matrix[row_number])
-}
 
 # predicts ratings(TEST 20)
 # data - rating matrix, users = rows, items = columns
@@ -313,9 +216,17 @@ sparse_matrix <- function(matrix, sparsity) {
     print("sparsity in (0,1) you stupid")
     return (matrix)
   }
+  res <- matrix
   values <- c(TRUE, FALSE)
   prob <- c(sparsity, 1 - sparsity)
   
-  return(apply(matrix, 1:2, function(x) { if (sample(c(values, prob))[1]) { return (x) }  else {return(NA)}}))
+  for ( i in 1: nrow(matrix)){
+    for ( j in 1: ncol(matrix))  {
+      if (!is.na(res[i,j]) & !sample(values, 1, prob = prob)[1]) {
+        res[i,j] <- NA  
+      }
+    }
+  }
+  return(res)
 
 }
