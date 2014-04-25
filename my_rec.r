@@ -51,7 +51,7 @@ cosine_similarity <- function(userA, userB) {
   return(scalar_product / (norm_a * norm_b))
 }
 
-
+clust
 
 # creating similarity matricix between users
 # TODO: Optimize it somehow

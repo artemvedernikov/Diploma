@@ -212,7 +212,7 @@ results_rmse <-rbind(results_rmse, c(rmseAlthree, rmseBlthree, rmseClthree,rmseD
 results_rmse <- rbind(results_rmse, c(rmseAlcosthree, rmseBlcosthree, rmseClcosthree, NA,NA,NA))
 
 
-
+rmseAl <- RMSE(testA[1:100,], big_ped_A, r[1:100,])
 
 
 
