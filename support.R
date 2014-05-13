@@ -1,3 +1,69 @@
+pearson_similarity <- function(userA, userB) {
+  
+  #average ratings given by users A and B
+  r_a <- mean(userA, na.rm=TRUE)
+  r_b <- mean(userB, na.rm=TRUE)
+  
+  co_rated <- (!is.na(userA) & !is.na(userB)) # note: & and && are different operators!!
+  co_rated_indexes <- c(1:length(userA))[co_rated]
+  
+  a <- 0
+  b <- 0
+  c <- 0
+  for (i in co_rated_indexes) {
+    a <- a + (userA[i] - r_a) * (userB[i] - r_b)
+    b <- b + (userA[i] - r_a) ^ 2
+    c <- c + (userB[i] - r_b) ^ 2
+  }
+  if (b == 0) {
+    return (0)
+  }
+  if (c == 0) {
+    return(0)
+  }
+  return (a / (sqrt(b) * sqrt(c))) 
+}
+
+cosine_similarity <- function(userA, userB) {
+  
+  co_rated <- (!is.na(userA) & !is.na(userB)) # note: & and && are different operators!!
+  
+  scalar_product <- sum(userA[co_rated] * userB[co_rated])
+  norm_a <- sqrt(sum(userA[co_rated]^2))
+  norm_b <- sqrt(sum(userB[co_rated]^2))
+  return(scalar_product / (norm_a * norm_b))
+}
+
+clust
+
+# creating similarity matricix between users
+# TODO: Optimize it somehow
+create_similarity_matrix <- function(rating_matrix, method="pearson", ...) {
+  res <- matrix(0, nrow(rating_matrix), nrow(rating_matrix))
+  if (method == "pearson") {
+    
+    for (i in 1:nrow(rating_matrix)) {
+      for (j in 1:i) {
+        res[i, j] <- pearson_similarity(rating_matrix[i,], rating_matrix[j,])      
+      }
+    }
+    
+    
+  } else if (method == "cosine") {
+    for (i in 1:nrow(rating_matrix)) {
+      for (j in 1:nrow(rating_matrix)) {
+        res[i, j] <- cosine_similarity(rating_matrix[i,], rating_matrix[j,])      
+      }
+    }
+  } 
+  for (i in 1:nrow(res)) {
+    for (j in i: nrow(res))
+      res[i,j] <- res[j,i]
+  }
+  res[is.na(res)] <- 0
+  return(res)
+}
+
 best_clust <- function(array, degree=0.8) { 
   degrees_and_class <- array
   degrees_and_class <- rbind(degrees_and_class,  c(1:length(array)))
