@@ -24,13 +24,13 @@ predict <- function(data, test = NULL, clust_num = 2, total_clust_num = 10, clus
   default_fanny <- fanny(as.dist(default_distance_matrix), total_clust_num, maxit = 20000, memb.exp = 1.5)
   default_clustering <- default_fanny['clustering'][[1]]
   default_membership <- default_fanny['membership'][[1]]
-  default_clusters <- lapply(split(default_membership, seq(nrow(default_membership))), best_clust)#  tut huinia!!!!!
+  default_clusters <- lapply(split(default_membership, seq(nrow(default_membership))), best_clust)
   
   print(Sys.time())
   print("preprocessing finished")
   
   for (i in 1:users_to_estimate) {
-    number_of_clusters <- length(default_clusters[[i]]) # double [[]] because it is list(fuck R typing)
+    number_of_clusters <- length(default_clusters[[i]]) # double [[]] because it is list
     
     ## moving estimated user to the first row to the sake of convenience
     estimated_matrix <- rbind(data[i,], data[-i,])
@@ -74,11 +74,7 @@ predict <- function(data, test = NULL, clust_num = 2, total_clust_num = 10, clus
       
       users_who_rated <- !apply(estimated_matrix, 1:2, is.na)
       
-      new_estimated_matrix[1,] <- estimate_user(estimated_matrix, 1, similarity_matrix[1,], mean_user_ratings, users_who_rated, ratings_to_estimate, 0, FALSE, similarity_matrix)  #CHECK IF similarity_matrix is correct(or estimated_matrix)))
-      if (number_of_clusters <= max_clust_num || iteration == max_iterations || nrow(estimated_matrix) <= min_clust_size) { # reached good clusterisation accuracy or fuck stop or it would last forever
-        print(i)
-        print(iteration)
-        print("=============")
+      new_estimated_matrix[1,] <- estimate_user(estimated_matrix, 1, similarity_matrix[1,], mean_user_ratings, users_who_rated, ratings_to_estimate, 0, FALSE, similarity_matrix) 
         break
       } else { #and recompute clustering and get new number_of_user_clusters
         max_clust_num <- number_of_clusters + cluster_shift
